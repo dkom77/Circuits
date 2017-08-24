@@ -50,5 +50,13 @@ public class DirectedGraph implements Graph{
         return graph.hashCode();
     }
 
+    @Override
+    public String toString(){
+        final StringBuilder sb = new StringBuilder();
+        //graph.entrySet().forEach(e -> {sb.append(e.getKey()).append(": "); e.getValue().forEach(ev -> sb.append(ev).append(" ")); sb.append("\n");});
+        graph.forEach((key, value) -> {sb.append(key).append(": "); value.forEach(v -> sb.append(v).append(" ")); sb.append("\n");});
+        return sb.toString();
+    }
+
 
 }

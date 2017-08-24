@@ -32,6 +32,8 @@ public class InputProcessorTest {
         sb.append("2 4").append("\n");
         sb.append("3 0").append("\n");
         sb.append("4 2").append("\n");
+        sb.append("5").append("\n");
+        sb.append(" 6").append("\n");
 
         InputStream stream = new ByteArrayInputStream(sb.toString().getBytes());
         Scanner scanner = new Scanner(stream);
@@ -42,12 +44,38 @@ public class InputProcessorTest {
         assertEquals(modelGraph, readGraph);
     }
 
+    @Test
+    public void stringsContainingIllegalSymbolsShouldBeIgnored() throws Exception {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(" ").append("\n");
+        sb.append("1.2 ").append("\n");
+        sb.append("-100 ").append("\n");
+        sb.append(" a").append("\n");
+        sb.append("18 a").append("\n");
+        sb.append("-4 2").append("\n");
+        sb.append("2 -4").append("\n");
+        sb.append("10 10 100").append("\n");
+
+        InputStream stream = new ByteArrayInputStream(sb.toString().getBytes());
+        Scanner scanner = new Scanner(stream);
+        InputProcessor processor = new InputProcessor(scanner);
+
+        DirectedGraph readGraph = (DirectedGraph) processor.loadGraph(new DirectedGraph());
+
+        assertEquals(new DirectedGraph(), readGraph);
+    }
+
+
+
     private void initModelGraph(){
         modelGraph.addVertex(0);
         modelGraph.addVertex(1);
         modelGraph.addVertex(2);
         modelGraph.addVertex(3);
         modelGraph.addVertex(4);
+        modelGraph.addVertex(5);
+        modelGraph.addVertex(6);
 
         modelGraph.addEdge(0, 1);
         modelGraph.addEdge(0, 2);
