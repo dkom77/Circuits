@@ -10,7 +10,7 @@ public class DirectedGraph implements Graph{
     private Map<Integer, HashSet<Integer>> graph;
 
     public DirectedGraph(){
-        graph = new HashMap<Integer, HashSet<Integer>>();
+        graph = new HashMap<>();
     }
 
     public void addVertex(int id) {
@@ -53,8 +53,11 @@ public class DirectedGraph implements Graph{
     @Override
     public String toString(){
         final StringBuilder sb = new StringBuilder();
-        //graph.entrySet().forEach(e -> {sb.append(e.getKey()).append(": "); e.getValue().forEach(ev -> sb.append(ev).append(" ")); sb.append("\n");});
-        graph.forEach((key, value) -> {sb.append(key).append(": "); value.forEach(v -> sb.append(v).append(" ")); sb.append("\n");});
+        graph.forEach((key, value) -> {
+            sb.append(key).append(": ");
+            value.forEach(v -> sb.append(v).append(" "));
+            sb.append("\n");
+        });
         return sb.toString();
     }
 

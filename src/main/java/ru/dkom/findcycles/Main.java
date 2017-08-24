@@ -20,7 +20,7 @@ public class Main {
         Graph graph = loader.loadGraph(new DirectedGraph());
         GraphProcessor processor = new GraphProcessor(graph);
 
-        System.out.println(processor.printCycles());
+        System.out.println(processor.findCycles().printCycles());
 
     }
 }

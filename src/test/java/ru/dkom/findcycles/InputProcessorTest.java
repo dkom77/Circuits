@@ -35,8 +35,7 @@ public class InputProcessorTest {
         sb.append("5").append("\n");
         sb.append(" 6").append("\n");
 
-        InputStream stream = new ByteArrayInputStream(sb.toString().getBytes());
-        Scanner scanner = new Scanner(stream);
+        Scanner scanner = new Scanner(sb.toString());
         InputProcessor processor = new InputProcessor(scanner);
 
         DirectedGraph readGraph = (DirectedGraph) processor.loadGraph(new DirectedGraph());
