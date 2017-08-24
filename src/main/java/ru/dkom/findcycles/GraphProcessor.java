@@ -14,39 +14,21 @@ public class GraphProcessor {
     }
 
     public GraphProcessor findCycles(){
-        List<List<Integer>> cycles = getCycles();
-        cycles = cycles.stream()
-                .filter(entry -> entry.size() > 1 )
-                .collect(Collectors.toList());
+        cycles = getCycles();
         return this;
     }
 
     public String printCycles(){
         StringBuilder sb = new StringBuilder();
-//        for (Graph c: cycles){
-//            sb.append(unwindCycle(c)).append("\n");
-//        }
+        for (List<Integer> c: cycles){
+            sb.append(unwindCycle(c)).append("\n");
+        }
         return sb.toString().trim();
     }
 
-    private String unwindCycle(Graph cycle){
+    private String unwindCycle(List<Integer> cycle){
         StringBuilder sb = new StringBuilder();
-
-        //LinkedList<Integer> order = getFinishingOrder((DirectedGraph) cycle, new LinkedList<>(cycle.getVertices()));
-
-//        for (Integer v: cycle.getVertices()){
-//            if ((order.size() == 0)||(!order.get(order.size() - 1).equals(v))){
-//                order.add(v);
-//            }
-//            for(Integer e: cycle.getEdges(v)){
-//                if (order.get(order.size() - 1).equals(e)){
-//                    continue;
-//                }
-//                order.add(e);
-//            }
-//        }
-
-//        order.forEach(o -> sb.append(o).append(" "));
+        cycle.forEach(o -> sb.append(o).append(" "));
         return sb.toString().trim();
     }
 
@@ -54,15 +36,44 @@ public class GraphProcessor {
         List<List<Integer>> cycles = new ArrayList<>();
 
         LinkedList<Integer> order = new LinkedList<>(graph.getVertices());
-        for (Integer o: order){
-            ArrayList<Integer> cycle = exploreCycle(o);
-            cycles.add(cycle);
+
+        HashMap<Integer, Integer> toVisit = new HashMap<>();
+        for (Integer v: graph.getVertices()){
+            int count = graph.getEdges(v).size();
+            toVisit.put(v, count);
         }
 
-        return null;
+        Set<Integer> done = new HashSet<>();
+
+        Iterator<Map.Entry<Integer,Integer>> iter = toVisit.entrySet().iterator();
+        while (iter.hasNext()){
+            Integer o = iter.next().getKey();
+            if (toVisit.get(o) <= 0){
+                iter.remove();
+                //iter = visited.entrySet().iterator();
+                continue;
+            }
+            ArrayList<Integer> cycle = exploreCycle(o, done);
+            if (cycle.size() > 2){
+                cycles.add(cycle);
+            }
+
+            for(int i = 0; i < cycle.size() - 1; i++){
+                int c = cycle.get(i);
+                Integer count = toVisit.get(c);
+                count--;
+                toVisit.put(c, count);
+                if (count == 0){
+                    done.add(c);
+                }
+            }
+            iter = toVisit.entrySet().iterator();
+        }
+
+        return cycles;
     }
 
-    private ArrayList<Integer> exploreCycle(Integer start){
+    private ArrayList<Integer> exploreCycle(Integer start, Set<Integer> done){
         LinkedList<Integer> stack = new LinkedList<>();
         Set<Integer> visited = new HashSet<>();
         ArrayList<Integer> cycle = new ArrayList<>();
@@ -72,15 +83,17 @@ public class GraphProcessor {
 
         while (stack.size() > 0){
             Integer curr = stack.removeLast();
+            cycle.add(curr);
             HashSet<Integer> edges = graph.getEdges(curr);
             for(Integer n: edges){
+                if (done.contains(n)){
+                    continue;
+                }
                 if (visited.contains(n)){
-                    cycle.add(curr);
                     cycle.add(n);
-                    break;
+                    return cycle;
                 }
                 visited.add(n);
-                cycle.add(curr);
                 stack.add(n);
             }
         }

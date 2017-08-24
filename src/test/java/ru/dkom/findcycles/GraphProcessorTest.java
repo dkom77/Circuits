@@ -61,7 +61,18 @@ public class GraphProcessorTest {
         modelGraph.addEdge(3, 0);
 
         GraphProcessor gp = new GraphProcessor(modelGraph);
-        assertEquals("1 2 3 1", gp.findCycles().printCycles());
+        assertEquals("0 2 0\n0 1 3 0", gp.findCycles().printCycles());
+    }
+
+    @Test
+    public void findCycles4(){
+        Graph modelGraph = new DirectedGraph();
+        modelGraph.addVertex(0);
+        modelGraph.addEdge(0, 0);
+
+
+        GraphProcessor gp = new GraphProcessor(modelGraph);
+        assertEquals("0 0 0", gp.findCycles().printCycles());
     }
 
 
