@@ -1,65 +1,38 @@
 package ru.dkom.findcycles;
 
-import java.util.HashSet;
-import java.util.NoSuchElementException;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 
 public class InputProcessor {
 
     private Scanner scanner;
-    private Scanner lineScanner;
+
 
     public InputProcessor(Scanner scanner){
         this.scanner = scanner;
     }
 
     public Graph loadGraph(Graph graph){
-        Set<Integer> seen = new HashSet<Integer>();
+        Scanner lineScanner = new Scanner("");
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
             lineScanner = new Scanner(line);
 
-            Integer mainEntity;
-            Integer dependsOn;
+            Integer mainId = readInt(lineScanner);
+            Integer depId = readInt(lineScanner);
 
-            boolean mainIdIsValid;
-            boolean dependsIdIsValid;
+            boolean mainIdValid = (mainId != null) && (mainId >= 0);
+            boolean depIdIsValid = ((depId != null) && (depId >= 0) || (depId == null));
 
-            try {
-                mainEntity = readInt();
-                mainIdIsValid = (mainEntity!= null) && (mainEntity >= 0);
-            }catch (NoSuchElementException nsee){
-                continue;
-            }
-
-            try {
-                dependsOn = readInt();
-                dependsIdIsValid = ((dependsOn!= null) && (dependsOn >= 0)) || (dependsOn == null);
-            }catch (NoSuchElementException nsee){
-                continue;
-            }
-
-            if ((lineScanner.hasNext())||(!mainIdIsValid)||(!dependsIdIsValid)){
+            if ((!mainIdValid)||(!depIdIsValid)||(lineScanner.hasNext())){
                 System.out.println("Illegal string: \"" + line + "\" was ignored");
-                //continue;
-            }
-
-            //graph.addVertex(mainEntity);
-
-            //if (dependsOn == null)
-
-            //graph.addVertex(dependsOn);
-
-            if (!addVertex(graph, seen, mainEntity)){
                 continue;
             }
 
-            if (!addVertex(graph, seen, dependsOn)){
-                continue;
+            graph.addVertex(mainId);
+            if (depId != null){
+                graph.addVertex(depId);
+                graph.addEdge(mainId, depId);
             }
-
-            graph.addEdge(mainEntity, dependsOn);
         }
 
         lineScanner.close();
@@ -68,18 +41,9 @@ public class InputProcessor {
         return graph;
     }
 
-    private boolean addVertex(Graph graph, Set<Integer> seen, Integer id){
-        if (id == null) return false;
-        if (!seen.contains(id)) {
-            graph.addVertex(id);
-            seen.add(id);
-        }
-        return true;
-    }
-
-    private Integer readInt(){
+    private Integer readInt(Scanner scanner){
         try {
-            return lineScanner.nextInt();
+            return scanner.nextInt();
         }catch (NoSuchElementException nsee){
             return null;
         }
