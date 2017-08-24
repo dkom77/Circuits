@@ -35,8 +35,6 @@ public class GraphProcessor {
     public List<List<Integer>> getCycles(){
         List<List<Integer>> cycles = new ArrayList<>();
 
-        LinkedList<Integer> order = new LinkedList<>(graph.getVertices());
-
         HashMap<Integer, Integer> toVisit = new HashMap<>();
         for (Integer v: graph.getVertices()){
             int count = graph.getEdges(v).size();
@@ -50,10 +48,15 @@ public class GraphProcessor {
             Integer o = iter.next().getKey();
             if (toVisit.get(o) <= 0){
                 iter.remove();
-                //iter = visited.entrySet().iterator();
                 continue;
             }
-            ArrayList<Integer> cycle = exploreCycle(o, done);
+            ArrayList<Integer> cycle;
+            try{
+                cycle = exploreCycle(o, done);
+            }catch (Exception e){
+                continue;
+            }
+
             if (cycle.size() > 2){
                 cycles.add(cycle);
             }
@@ -73,7 +76,7 @@ public class GraphProcessor {
         return cycles;
     }
 
-    private ArrayList<Integer> exploreCycle(Integer start, Set<Integer> done){
+    private ArrayList<Integer> exploreCycle(Integer start, Set<Integer> done) throws Exception{
         LinkedList<Integer> stack = new LinkedList<>();
         Set<Integer> visited = new HashSet<>();
         ArrayList<Integer> cycle = new ArrayList<>();
@@ -90,6 +93,7 @@ public class GraphProcessor {
                     continue;
                 }
                 if (visited.contains(n)){
+                //if (visited){
                     cycle.add(n);
                     return cycle;
                 }
@@ -97,7 +101,9 @@ public class GraphProcessor {
                 stack.add(n);
             }
         }
-        return cycle;
+        //return new ArrayList<>();
+        throw new Exception("not a cycle");
+        //return cycle;
     }
 
 }

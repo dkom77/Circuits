@@ -55,6 +55,7 @@ public class InputProcessorTest {
         sb.append("-4 2").append("\n");
         sb.append("2 -4").append("\n");
         sb.append("10 10 100").append("\n");
+        sb.append("3 3").append("\n");
 
         InputStream stream = new ByteArrayInputStream(sb.toString().getBytes());
         Scanner scanner = new Scanner(stream);
