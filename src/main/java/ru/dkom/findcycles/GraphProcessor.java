@@ -78,7 +78,8 @@ public class GraphProcessor {
 
     private ArrayList<Integer> exploreCycle(Integer start, Set<Integer> done) throws Exception{
         LinkedList<Integer> stack = new LinkedList<>();
-        Set<Integer> visited = new HashSet<>();
+        //Set<Integer> visited = new HashSet<>();
+        ArrayList<Integer> visited = new ArrayList<>();
         ArrayList<Integer> cycle = new ArrayList<>();
 
         visited.add(start);
@@ -93,9 +94,12 @@ public class GraphProcessor {
                     continue;
                 }
                 if (visited.contains(n)){
-                //if (visited){
-                    cycle.add(n);
-                    return cycle;
+                    if (visited.get(0).equals(n)){
+                        cycle.add(n);
+                        return cycle;
+                    }else {
+                        throw new Exception("not a cycle");
+                    }
                 }
                 visited.add(n);
                 stack.add(n);
