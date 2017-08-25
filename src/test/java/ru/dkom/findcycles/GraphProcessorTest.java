@@ -108,6 +108,28 @@ public class GraphProcessorTest {
     }
 
     @Test
+    public void crossCycles(){
+        Graph modelGraph = new DirectedGraph();
+        modelGraph.addVertex(0);
+        modelGraph.addVertex(1);
+        modelGraph.addVertex(2);
+        modelGraph.addVertex(3);
+
+        modelGraph.addEdge(0, 1);
+
+        modelGraph.addEdge(1, 2);
+
+        modelGraph.addEdge(2, 0);
+        modelGraph.addEdge(2, 3);
+
+        modelGraph.addEdge(3, 0);
+        modelGraph.addEdge(3, 1);
+
+        GraphProcessor gp = new GraphProcessor(modelGraph);
+        assertEquals("0 1 2 0\n", gp.findCycles().printCycles());
+    }
+
+    @Test
     public void shouldNotFindAnyCycles(){
         Graph modelGraph = new DirectedGraph();
         modelGraph.addVertex(0);
