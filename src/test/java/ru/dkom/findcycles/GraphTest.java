@@ -40,16 +40,6 @@ public class GraphTest {
 
     }
 
-    @Test
-    public void containsVertex() throws Exception {
-    }
 
-    @Test
-    public void getVertices() throws Exception {
-    }
-
-    @Test
-    public void getEdges() throws Exception {
-    }
 
 }

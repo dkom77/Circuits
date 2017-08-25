@@ -1,7 +1,6 @@
 package ru.dkom.findcycles;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class GraphProcessor {
 
@@ -42,14 +41,14 @@ public class GraphProcessor {
 
         Iterator<Map.Entry<Integer,Integer>> iter = toVisit.entrySet().iterator();
         while (iter.hasNext()){
-            Integer o = iter.next().getKey();
-            if (toVisit.get(o) <= 0){
+            Integer curr = iter.next().getKey();
+            if (toVisit.get(curr) <= 0){
                 iter.remove();
                 continue;
             }
             ArrayList<Integer> cycle;
             try{
-                cycle = exploreCycle(o, done);
+                cycle = exploreCycle(curr, done);
             }catch (Exception e){
                 continue;
             }

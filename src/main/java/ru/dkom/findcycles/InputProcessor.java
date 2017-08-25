@@ -21,7 +21,7 @@ public class InputProcessor {
             Integer depId = readInt(lineScanner);
 
             boolean mainIdIsValid = (mainId != null) && (mainId >= 0);
-            boolean depIdIsValid = ((depId != null) && (depId >= 0) || (depId == null));
+            boolean depIdIsValid = (depId != null) && (depId >= 0) || (depId == null);
 
             if ((!mainIdIsValid)||(!depIdIsValid)||(lineScanner.hasNext())||(mainId.equals(depId))){
                 System.out.println("Illegal string: \"" + line + "\" was ignored");

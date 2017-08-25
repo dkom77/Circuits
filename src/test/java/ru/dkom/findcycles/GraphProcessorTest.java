@@ -26,7 +26,7 @@ public class GraphProcessorTest {
     }
 
     @Test
-    public void findCycles2() throws Exception {
+    public void longCycle() throws Exception {
         StringBuilder sb = new StringBuilder();
         sb.append("1 2").append("\n");
         sb.append("2 3").append("\n");
@@ -39,7 +39,7 @@ public class GraphProcessorTest {
     }
 
     @Test
-    public void findCycles3(){
+    public void multipleDependencies(){
         Graph modelGraph = new DirectedGraph();
         modelGraph.addVertex(0);
         modelGraph.addVertex(1);
@@ -60,7 +60,7 @@ public class GraphProcessorTest {
     }
 
     @Test
-    public void findCycles4(){
+    public void multipleDependencies2(){
         Graph modelGraph = new DirectedGraph();
         modelGraph.addVertex(0);
         modelGraph.addVertex(1);
