@@ -5,6 +5,8 @@ import java.util.stream.Collectors;
 
 public class GraphProcessor {
 
+    private final static int MIN_LOOP_SIZE = 2;
+
     private Graph graph;
     private List<List<Integer>> cycles;
 
@@ -20,15 +22,13 @@ public class GraphProcessor {
 
     public String printCycles(){
         StringBuilder sb = new StringBuilder();
-        for (List<Integer> c: cycles){
-            sb.append(unwindCycle(c)).append("\n");
-        }
+        cycles.forEach(cs -> sb.append(unwindCycle(cs)).append("\n"));
         return sb.toString().trim();
     }
 
     private String unwindCycle(List<Integer> cycle){
         StringBuilder sb = new StringBuilder();
-        cycle.forEach(o -> sb.append(o).append(" "));
+        cycle.forEach(c -> sb.append(c).append(" "));
         return sb.toString().trim();
     }
 
@@ -36,10 +36,7 @@ public class GraphProcessor {
         List<List<Integer>> cycles = new ArrayList<>();
 
         HashMap<Integer, Integer> toVisit = new HashMap<>();
-        for (Integer v: graph.getVertices()){
-            int count = graph.getEdges(v).size();
-            toVisit.put(v, count);
-        }
+        graph.getVertices().forEach(v -> toVisit.put(v, graph.getEdges(v).size()));
 
         Set<Integer> done = new HashSet<>();
 
@@ -57,17 +54,17 @@ public class GraphProcessor {
                 continue;
             }
 
-            if (cycle.size() > 2){
+            if (cycle.size() > MIN_LOOP_SIZE){
                 cycles.add(cycle);
             }
 
             for(int i = 0; i < cycle.size() - 1; i++){
-                int c = cycle.get(i);
-                Integer count = toVisit.get(c);
+                int cycleStep = cycle.get(i);
+                Integer count = toVisit.get(cycleStep);
                 count--;
-                toVisit.put(c, count);
+                toVisit.put(cycleStep, count);
                 if (count == 0){
-                    done.add(c);
+                    done.add(cycleStep);
                 }
             }
             iter = toVisit.entrySet().iterator();
@@ -78,7 +75,6 @@ public class GraphProcessor {
 
     private ArrayList<Integer> exploreCycle(Integer start, Set<Integer> done) throws Exception{
         LinkedList<Integer> stack = new LinkedList<>();
-        //Set<Integer> visited = new HashSet<>();
         ArrayList<Integer> visited = new ArrayList<>();
         ArrayList<Integer> cycle = new ArrayList<>();
 
@@ -105,9 +101,7 @@ public class GraphProcessor {
                 stack.add(n);
             }
         }
-        //return new ArrayList<>();
         throw new Exception("not a cycle");
-        //return cycle;
     }
 
 }

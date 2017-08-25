@@ -20,10 +20,10 @@ public class InputProcessor {
             Integer mainId = readInt(lineScanner);
             Integer depId = readInt(lineScanner);
 
-            boolean mainIdValid = (mainId != null) && (mainId >= 0);
+            boolean mainIdIsValid = (mainId != null) && (mainId >= 0);
             boolean depIdIsValid = ((depId != null) && (depId >= 0) || (depId == null));
 
-            if ((!mainIdValid)||(!depIdIsValid)||(lineScanner.hasNext())||(mainId.equals(depId))){
+            if ((!mainIdIsValid)||(!depIdIsValid)||(lineScanner.hasNext())||(mainId.equals(depId))){
                 System.out.println("Illegal string: \"" + line + "\" was ignored");
                 continue;
             }
