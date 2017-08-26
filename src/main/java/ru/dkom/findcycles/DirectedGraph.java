@@ -1,9 +1,6 @@
 package ru.dkom.findcycles;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class DirectedGraph implements Graph{
 
@@ -15,7 +12,7 @@ public class DirectedGraph implements Graph{
 
     public void addVertex(int id) {
         if (!graph.containsKey(id)){
-            graph.put(id, new HashSet<Integer>());
+            graph.put(id, new HashSet<>());
         }
     }
 
@@ -34,7 +31,7 @@ public class DirectedGraph implements Graph{
     }
 
     public HashSet<Integer> getEdges(int id) {
-        return (graph.get(id) == null) ? new HashSet<Integer>(): graph.get(id);
+        return (graph.get(id) == null) ? new HashSet<>(): graph.get(id);
     }
 
     @Override
