@@ -43,7 +43,7 @@ public class InputProcessor {
         lineScanner.close();
         scanner.close();
 
-        System.out.println("Graph loaded");
+        System.out.println("Graph loaded " + counter + " lines read. Graph vertices amount: " + graph.getVertices().size());
 
         return graph;
     }
