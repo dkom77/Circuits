@@ -126,7 +126,7 @@ public class GraphProcessorTest {
         modelGraph.addEdge(3, 1);
 
         GraphProcessor gp = new GraphProcessor(modelGraph);
-        assertEquals("0 1 2 0\n", gp.findCycles().printCycles());
+        assertEquals("0 1 2 0\n0 1 2 3 0\n1 2 3 1", gp.findCycles().printCycles());
     }
 
     @Test

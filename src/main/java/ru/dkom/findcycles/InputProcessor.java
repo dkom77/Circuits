@@ -41,6 +41,7 @@ public class InputProcessor {
         return graph;
     }
 
+
     private Integer readInt(Scanner scanner){
         try {
             return scanner.nextInt();

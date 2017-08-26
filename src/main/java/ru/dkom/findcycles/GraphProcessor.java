@@ -7,11 +7,11 @@ public class GraphProcessor {
     private final static int MIN_LOOP_SIZE = 2;
 
     private Graph graph;
-    private List<List<Integer>> cycles;
+    private Set<Cycle> cycles;
 
     public GraphProcessor(Graph graph) {
         this.graph = graph;
-        this.cycles = new ArrayList<>();
+        this.cycles = new HashSet<>();
     }
 
     public GraphProcessor findCycles() {
@@ -21,7 +21,8 @@ public class GraphProcessor {
 
     public String printCycles() {
         StringBuilder sb = new StringBuilder();
-        cycles.forEach(cs -> sb.append(unwindCycle(cs)).append("\n"));
+        //cycles.forEach(cs -> sb.append(unwindCycle(cs)).append("\n"));
+        cycles.forEach(c-> sb.append(c.toString()).append("\n"));
         return sb.toString().trim();
     }
 
@@ -31,8 +32,8 @@ public class GraphProcessor {
         return sb.toString().trim();
     }
 
-    public List<List<Integer>> getCycles() {
-        List<List<Integer>> cycles = new ArrayList<>();
+    public Set<Cycle> getCycles() {
+        HashSet<Cycle> cycles = new HashSet<>();
 
         DirectedGraph reverse = invertGraph();
 
@@ -40,12 +41,13 @@ public class GraphProcessor {
 
 
         for (Integer start : graph.getVertices()) {
+            int k = 0;
             for (Integer dest : reverse.getEdges(start)) {
                 ArrayList<Integer> cycle;
                 try {
                     cycle = exploreCycle(start, dest, done);
                     for(int i = 0; i < cycle.size() - 1; i++){
-                        done.put(cycle.get(i), cycle.get(i + 1));
+                        //done.put(cycle.get(i), cycle.get(i + 1));
                     }
                     int t = 0;
 
@@ -54,10 +56,42 @@ public class GraphProcessor {
                 }
 
                 if (cycle.size() > MIN_LOOP_SIZE) {
-                    cycles.add(cycle);
+                    cycles.add(new Cycle(cycle));
                 }
             }
         }
+        return cycles;
+    }
+
+
+//    public List<List<Integer>> getCycles() {
+//        List<List<Integer>> cycles = new ArrayList<>();
+//
+//        DirectedGraph reverse = invertGraph();
+//
+//        Map<Integer, Integer> done = new HashMap<>();
+//
+//
+//        for (Integer start : graph.getVertices()) {
+//            int k = 0;
+//            for (Integer dest : reverse.getEdges(start)) {
+//                ArrayList<Integer> cycle;
+//                try {
+//                    cycle = exploreCycle(start, dest, done);
+//                    for(int i = 0; i < cycle.size() - 1; i++){
+//                        //done.put(cycle.get(i), cycle.get(i + 1));
+//                    }
+//                    int t = 0;
+//
+//                } catch (Exception e) {
+//                    continue;
+//                }
+//
+//                if (cycle.size() > MIN_LOOP_SIZE) {
+//                    cycles.add(cycle);
+//                }
+//            }
+//        }
 
 //        HashMap<Integer, Integer> toVisit = new HashMap<>();
 //        graph.getVertices().forEach(v -> toVisit.put(v, graph.getEdges(v).size()));
@@ -93,9 +127,9 @@ public class GraphProcessor {
 //            }
 //            iter = toVisit.entrySet().iterator();
 //        }
-
-        return cycles;
-    }
+//
+//        return cycles;
+//    }
 
     private ArrayList<Integer> exploreCycle(Integer start, Integer dest, Map<Integer, Integer> done) throws Exception {
         LinkedList<Integer> stack = new LinkedList<>();
@@ -110,7 +144,7 @@ public class GraphProcessor {
             cycle.add(curr);
             HashSet<Integer> edges = graph.getEdges(curr);
             for (Integer n : edges) {
-                if (done.get(n).equals(curr)) {
+                if (done.get(curr)!= null && done.get(curr).equals(n)) {
                     continue;
                 }
                 if (visited.contains(n)) {
@@ -118,7 +152,8 @@ public class GraphProcessor {
                         cycle.add(start);
                         return cycle;
                     }else {
-                        throw new Exception("not a cycle");
+                        //throw new Exception("not a cycle");
+                        break;
                     }
                 }
                 visited.add(n);
