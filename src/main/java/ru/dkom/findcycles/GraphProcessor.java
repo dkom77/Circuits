@@ -7,14 +7,19 @@ public class GraphProcessor {
     private final static int MIN_LOOP_SIZE = 2;
 
     private Graph graph;
-    private Map<DirectedGraph, LinkedList<Integer>> cycles;
+    //private Map<DirectedGraph, LinkedList<Integer>> cycles;
+
+    List<List<Integer>> loops;
+
 
     public GraphProcessor(Graph graph) {
         this.graph = graph;
-        this.cycles = new HashMap<>();
+        //this.cycles = new HashMap<>();
+        this.loops = new ArrayList<>();
     }
 
     public GraphProcessor findCycles() {
+        //findAllPath();
         getCycles();
         //cycles = getCycles();
         //cycles = new HashSet<DirectedGraph>(getSCCs());
@@ -23,47 +28,21 @@ public class GraphProcessor {
 
     public String printCycles() {
         StringBuilder sb = new StringBuilder();
-        //cycles.forEach(cs -> sb.append(unwindCycle(cs)).append("\n"));
-        //cycles.forEach(c-> sb.append(c.toString()).append("\n"));
+        loops.forEach(cs -> sb.append(unwindCycle(cs)).append("\n"));
+        //loops.forEach(c-> sb.append(c.toString()).append("\n"));
 
-        for(Map.Entry<DirectedGraph, LinkedList<Integer>> entry: cycles.entrySet()){
-            sb.append(unwindCycle(entry.getValue())).append("\n");
-        }
+//        for(Map.Entry<DirectedGraph, LinkedList<Integer>> entry: cycles.entrySet()){
+//            sb.append(unwindCycle(entry.getValue())).append("\n");
+//        }
 
         return sb.toString().trim();
     }
 
-    private String unwindCycle(LinkedList<Integer> path) {
+    private String unwindCycle(List<Integer> path) {
         StringBuilder sb = new StringBuilder();
 
         path.forEach(v -> sb.append(v).append(" "));
 
-
-//        //cycle.getVertices().forEach(v -> sb.append(v).append(" "));
-//        List<Integer> cycleVertices = new ArrayList<>(cycle.getVertices());
-//        ArrayList<Integer> list = new ArrayList<>();
-//
-//        for(Iterator<Integer> iterator = cycleVertices.iterator(); iterator.hasNext();){
-//            Integer vertex = iterator.next();
-//
-//        }
-//
-//        for (int i = 0; i < cycleVertices.size(); i ++){
-//            Integer currVertex = cycleVertices.get(i);
-//            list.add(currVertex);
-//
-//            HashSet<Integer> edges = cycle.getEdges(currVertex);
-//            if (edges.size() != 1){
-//                throw new RuntimeException("Bad cycle");
-//            }
-//
-//
-//        }
-//
-//        list.add(list.get(0));
-//
-//        list.forEach(v -> sb.append(v).append(" "));
-//
         return sb.toString().trim();
     }
 
@@ -73,13 +52,29 @@ public class GraphProcessor {
 
         DirectedGraph reverse = invertGraph();
 
-        for (Integer start : graph.getVertices()) {
+        HashSet<Integer> visited = new HashSet<>();
+
+        ArrayList<Integer> potential = new ArrayList<>();
+        for (Integer i: graph.getVertices()){
+            if ((graph.getEdges(i).size() == 0)||(reverse.getEdges(i).size() == 0)){
+                continue;
+            }
+            potential.add(i);
+        }
+
+
+        List<List<Integer>> allPath = new ArrayList<>();
+
+
+
+        for (Integer start : potential) {
             for (Integer dest : reverse.getEdges(start)) {
                 DirectedGraph cycle;
                 try {
                     //cycle = exploreCycle(start, dest);
 
-                    exploreCycle(start, dest);
+                    List<Integer> path = exploreCycle(start, dest);
+                    allPath.add(path);
 
 //                    if (cycle.getVertices().size() >= MIN_LOOP_SIZE) {
 //                        cycles.add(cycle);
@@ -92,16 +87,37 @@ public class GraphProcessor {
                 }
             }
         }
+
+        //remove dupes
+
+        ArrayList<LinkedList<Integer>> copy = new ArrayList<>();
+        for (List<Integer> ll: allPath){
+            copy.add(new LinkedList<>(ll));
+        }
+
+        HashSet<List<Integer>> m = new HashSet<>();
+        for (int i = 0; i < allPath.size(); i++){
+            Collections.sort(copy.get(i));
+            if (!m.contains(copy.get(i))){
+
+                allPath.get(i).add(allPath.get(i).get(0));
+
+                loops.add(allPath.get(i));
+                m.add(copy.get(i));
+            }
+        }
+
+        int t = 0;
+
+
         //return cycles;
     }
 
-    private DirectedGraph exploreCycle(Integer start, Integer dest) throws Exception {
+    private List<Integer> exploreCycle(Integer start, Integer dest) throws Exception {
         LinkedList<Integer> stack = new LinkedList<>();
         HashSet<Integer> visited = new HashSet<>();
 
         HashMap<Integer, Integer> map = new HashMap<>();
-
-        DirectedGraph cycle = new DirectedGraph();
 
         visited.add(start);
         stack.add(start);
@@ -116,18 +132,9 @@ public class GraphProcessor {
                     curr = map.get(curr);
                 }
                 path.addFirst(start);
-                path.addLast(start);
+                //path.addLast(start);
 
-                //return path;
-                for (int i = 0; i < path.size() - 1; i++){
-                    cycle.addVertex(path.get(i));
-                    cycle.addEdge(path.get(i), path.get(i + 1));
-                }
-                cycle.addEdge(path.get(path.size() - 1), path.get(0));
-
-                cycles.put(cycle, path);
-
-                return cycle;
+                return path;
             }
 
             HashSet<Integer> edges = graph.getEdges(curr);
@@ -136,15 +143,12 @@ public class GraphProcessor {
                 if (!visited.contains(n)) {
                     visited.add(n);
                     stack.add(n);
-
                     map.put(n, curr);
                 }
-
             }
         }
         throw new Exception("not a cycle");
     }
-
 
     private DirectedGraph invertGraph() {
         DirectedGraph reverse = new DirectedGraph();
