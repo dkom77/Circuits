@@ -100,7 +100,7 @@ public class GraphProcessor {
             Collections.sort(copy.get(i));
             if (!m.contains(copy.get(i))){
 
-                allPath.get(i).add(allPath.get(i).get(0));
+                //allPath.get(i).add(allPath.get(i).get(0));
 
                 loops.add(allPath.get(i));
                 m.add(copy.get(i));
@@ -108,6 +108,74 @@ public class GraphProcessor {
         }
 
         int t = 0;
+        for (int i = 0; i < loops.size(); i++) {
+
+            List<Integer> l = loops.get(i);
+            int min = l.get(0);
+            int minPos = 0;
+            for (int j = 0; j < l.size(); j++){
+                if (l.get(j) < min){
+                    min = l.get(j);
+                    minPos = j;
+                }
+            }
+
+
+            List<Integer> norm = new ArrayList<>(l.subList(minPos, l.size()));
+            norm.addAll(l.subList(0, minPos));
+            norm.add(norm.get(0));
+
+//            norm.add(min);
+//            while (norm.size() < l.size()){
+//                norm.add(new ArrayList<>(graph.getEdges(norm.peekLast())).get(0));
+//            }
+            loops.get(i).clear();
+            loops.get(i).addAll(norm);
+        }
+
+        Collections.sort(loops, new Comparator<List<Integer>>() {
+            @Override
+            public int compare(List<Integer> o1, List<Integer> o2) {
+                for (int i = 0; i < Math.min(o1.size(), o2.size()); i++){
+                    if (!o1.get(i).equals(o2.get(i))){
+                        return  (o1.get(i) < o2.get(i)) ? -1 : 1;
+                    }
+                }
+
+                if (o1.size() < o2.size()) {
+                    return -1;
+                }
+
+                if (o1.size() < o2.size()) {
+                    return 1;
+                }
+
+                return 0;
+
+//                if (o1.size() < o2.size()){
+//                    return -1;
+//                }
+//
+//                if (o1.size() > o2.size()){
+//                    return 1;
+//                }
+//
+//                for (int i = 0; i < o1.size(); i++){
+//                    if (o1.get(i) < o2.get(i)){
+//                        return -1;
+//                    }
+//
+//                    if (o1.get(i) > o2.get(i)){
+//                        return 1;
+//                    }
+//                }
+//
+//                return 0;
+            }
+        });
+
+
+        int z = 0;
 
 
         //return cycles;

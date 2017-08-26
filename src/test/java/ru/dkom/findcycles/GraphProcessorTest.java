@@ -56,7 +56,7 @@ public class GraphProcessorTest {
         modelGraph.addEdge(3, 0);
 
         GraphProcessor gp = new GraphProcessor(modelGraph);
-        assertEquals("0 2 0\n0 1 3 0", gp.findCycles().printCycles());
+        assertEquals("0 1 3 0\n0 2 0", gp.findCycles().printCycles());
     }
 
     @Test
@@ -82,7 +82,7 @@ public class GraphProcessorTest {
 
 
         GraphProcessor gp = new GraphProcessor(modelGraph);
-        assertEquals("0 2 0\n0 1 3 0\n3 4 3", gp.findCycles().printCycles());
+        assertEquals("0 1 3 0\n0 2 0\n3 4 3", gp.findCycles().printCycles());
     }
 
     @Test
@@ -127,6 +127,30 @@ public class GraphProcessorTest {
 
         GraphProcessor gp = new GraphProcessor(modelGraph);
         assertEquals("0 1 2 0\n0 1 2 3 0\n1 2 3 1", gp.findCycles().printCycles());
+    }
+
+    @Test
+    public void innerLoops(){
+        Graph modelGraph = new DirectedGraph();
+        modelGraph.addVertex(0);
+        modelGraph.addVertex(1);
+        modelGraph.addVertex(2);
+        modelGraph.addVertex(3);
+        modelGraph.addVertex(4);
+
+        modelGraph.addEdge(0, 1);
+
+        modelGraph.addEdge(1, 2);
+        modelGraph.addEdge(1, 3);
+
+        modelGraph.addEdge(2, 4);
+
+        modelGraph.addEdge(3, 4);
+
+        modelGraph.addEdge(4, 0);
+
+        GraphProcessor gp = new GraphProcessor(modelGraph);
+        assertEquals("0 1 2 4 0\n0 1 3 4 0", gp.findCycles().printCycles());
     }
 
     @Test
