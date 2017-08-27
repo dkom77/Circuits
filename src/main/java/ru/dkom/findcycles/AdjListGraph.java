@@ -2,11 +2,11 @@ package ru.dkom.findcycles;
 
 import java.util.*;
 
-public class DirectedGraph implements Graph{
+public class AdjListGraph implements Graph{
 
     private Map<Integer, HashSet<Integer>> graph;
 
-    public DirectedGraph(){
+    public AdjListGraph(){
         graph = new HashMap<>();
     }
 
@@ -37,8 +37,8 @@ public class DirectedGraph implements Graph{
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof DirectedGraph)) return false;
-        DirectedGraph other = (DirectedGraph) o;
+        if (!(o instanceof AdjListGraph)) return false;
+        AdjListGraph other = (AdjListGraph) o;
         return graph.equals(other.graph);
     }
 

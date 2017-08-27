@@ -21,7 +21,7 @@ public class GraphProcessorTest {
 
         Scanner scanner = new Scanner(sb.toString());
         InputProcessor ip = new InputProcessor(scanner);
-        GraphProcessor gp = new GraphProcessor(ip.loadGraph(new DirectedGraph()));
+        GraphProcessor gp = new GraphProcessor(ip.loadGraph(new AdjListGraph()));
         assertEquals("1 2 1\n5 6 5", gp.findCycles().printCycles());
     }
 
@@ -34,13 +34,13 @@ public class GraphProcessorTest {
 
         Scanner scanner = new Scanner(sb.toString());
         InputProcessor ip = new InputProcessor(scanner);
-        GraphProcessor gp = new GraphProcessor(ip.loadGraph(new DirectedGraph()));
+        GraphProcessor gp = new GraphProcessor(ip.loadGraph(new AdjListGraph()));
         assertEquals("1 2 3 1", gp.findCycles().printCycles());
     }
 
     @Test
     public void multipleDependencies(){
-        Graph modelGraph = new DirectedGraph();
+        Graph modelGraph = new AdjListGraph();
         modelGraph.addVertex(0);
         modelGraph.addVertex(1);
         modelGraph.addVertex(2);
@@ -61,7 +61,7 @@ public class GraphProcessorTest {
 
     @Test
     public void multipleDependencies2(){
-        Graph modelGraph = new DirectedGraph();
+        Graph modelGraph = new AdjListGraph();
         modelGraph.addVertex(0);
         modelGraph.addVertex(1);
         modelGraph.addVertex(2);
@@ -87,7 +87,7 @@ public class GraphProcessorTest {
 
     @Test
     public void cycleInTheMiddle(){
-        Graph modelGraph = new DirectedGraph();
+        Graph modelGraph = new AdjListGraph();
         modelGraph.addVertex(0);
         modelGraph.addVertex(1);
         modelGraph.addVertex(2);
@@ -109,7 +109,7 @@ public class GraphProcessorTest {
 
     @Test
     public void crossCycles(){
-        Graph modelGraph = new DirectedGraph();
+        Graph modelGraph = new AdjListGraph();
         modelGraph.addVertex(0);
         modelGraph.addVertex(1);
         modelGraph.addVertex(2);
@@ -131,7 +131,7 @@ public class GraphProcessorTest {
 
     @Test
     public void innerLoops(){
-        Graph modelGraph = new DirectedGraph();
+        Graph modelGraph = new AdjListGraph();
         modelGraph.addVertex(0);
         modelGraph.addVertex(1);
         modelGraph.addVertex(2);
@@ -154,8 +154,32 @@ public class GraphProcessorTest {
     }
 
     @Test
+    public void innerLoops2(){
+        Graph modelGraph = new AdjListGraph();
+        modelGraph.addVertex(1);
+        modelGraph.addVertex(2);
+        modelGraph.addVertex(3);
+        modelGraph.addVertex(4);
+
+        modelGraph.addEdge(1, 3);
+        modelGraph.addEdge(1, 2);
+
+        modelGraph.addEdge(2, 1);
+        modelGraph.addEdge(2, 4);
+
+        modelGraph.addEdge(3, 4);
+
+        modelGraph.addEdge(4, 2);
+
+
+
+        GraphProcessor gp = new GraphProcessor(modelGraph);
+        assertEquals("1 2 1\n1 3 4 2 1\n2 4 2", gp.findCycles().printCycles());
+    }
+
+    @Test
     public void shouldNotFindAnyCycles(){
-        Graph modelGraph = new DirectedGraph();
+        Graph modelGraph = new AdjListGraph();
         modelGraph.addVertex(0);
         modelGraph.addVertex(1);
         modelGraph.addVertex(2);

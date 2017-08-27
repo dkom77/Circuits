@@ -3,8 +3,6 @@ package ru.dkom.findcycles;
 import org.junit.Test;
 
 import java.io.*;
-import java.nio.CharBuffer;
-import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 import static org.junit.Assert.*;
@@ -14,7 +12,7 @@ public class InputProcessorTest {
     private Graph modelGraph;
 
     public InputProcessorTest(){
-        modelGraph = new DirectedGraph();
+        modelGraph = new AdjListGraph();
         initModelGraph();
     }
 
@@ -38,7 +36,7 @@ public class InputProcessorTest {
         Scanner scanner = new Scanner(sb.toString());
         InputProcessor processor = new InputProcessor(scanner);
 
-        DirectedGraph readGraph = (DirectedGraph) processor.loadGraph(new DirectedGraph());
+        AdjListGraph readGraph = (AdjListGraph) processor.loadGraph(new AdjListGraph());
 
         assertEquals(modelGraph, readGraph);
     }
@@ -61,9 +59,9 @@ public class InputProcessorTest {
         Scanner scanner = new Scanner(stream);
         InputProcessor processor = new InputProcessor(scanner);
 
-        DirectedGraph readGraph = (DirectedGraph) processor.loadGraph(new DirectedGraph());
+        AdjListGraph readGraph = (AdjListGraph) processor.loadGraph(new AdjListGraph());
 
-        assertEquals(new DirectedGraph(), readGraph);
+        assertEquals(new AdjListGraph(), readGraph);
     }
 
 

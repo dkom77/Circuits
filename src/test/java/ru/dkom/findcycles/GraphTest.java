@@ -1,6 +1,5 @@
 package ru.dkom.findcycles;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -14,7 +13,7 @@ public class GraphTest {
 
     @Before
     public void setup(){
-        graph = new DirectedGraph();
+        graph = new AdjListGraph();
     }
 
     @Test

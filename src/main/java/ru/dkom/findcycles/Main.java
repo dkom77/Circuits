@@ -17,7 +17,7 @@ public class Main {
         }
 
         InputProcessor loader = new InputProcessor(scanner);
-        Graph graph = loader.loadGraph(new DirectedGraph());
+        Graph graph = loader.loadGraph(new AdjListGraph());
         GraphProcessor processor = new GraphProcessor(graph);
 
         System.out.println(processor.findCycles().printCycles());

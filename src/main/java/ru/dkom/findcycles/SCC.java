@@ -1,10 +1,8 @@
 package ru.dkom.findcycles;
 
+import java.lang.reflect.Constructor;
 import java.util.*;
 
-/**
- * Created by User on 26.08.2017.
- */
 public class SCC {
 
     private Graph graph;
@@ -14,15 +12,13 @@ public class SCC {
     }
 
 
-    public List<DirectedGraph> getSCCs() {
-        LinkedList<Integer> order = getFinishingOrder((DirectedGraph) graph, new LinkedList<>(graph.getVertices()));
-        DirectedGraph reverse = invertGraph();
+    public List<Graph> getSCCs() {
+        LinkedList<Integer> order = getFinishingOrder(graph, new LinkedList<>(graph.getVertices()));
+        Graph reverse = invertGraph();
 
-        List<DirectedGraph> stronglyConnectedComponents = new ArrayList<>();
-
-
+        List<Graph> stronglyConnectedComponents = new ArrayList<>();
         Set<Integer> visited = new HashSet<>();
-        LinkedHashSet<Integer> finished = new LinkedHashSet<>();
+        Set<Integer> finished = new LinkedHashSet<>();
 
         while(order.size() > 0) {
             int v = order.removeLast();
@@ -33,32 +29,22 @@ public class SCC {
             LinkedHashSet<Integer> sccVertices = new LinkedHashSet<>();
             visit(reverse, v, visited, sccVertices);
 
-            Graph scc = new DirectedGraph();
+            Graph scc = new AdjListGraph();
             finished.addAll(sccVertices);
+            sccVertices.forEach(sccV -> {
+                graph.getEdges(sccV).forEach(sccE-> scc.addEdge(sccV, sccE));
+            });
 
 
-            for (int sccV: sccVertices){
-                scc.addVertex(sccV);
-                for (int sccE: graph.getEdges(sccV)){
-                    if (sccVertices.contains(sccE)){
-                        scc.addEdge(sccV, sccE);
-                    }
-
-                }
-            }
-
-            stronglyConnectedComponents.add((DirectedGraph) scc);
+            stronglyConnectedComponents.add(scc);
 
         }
         return stronglyConnectedComponents;
     }
 
-    private LinkedList<Integer> getFinishingOrder(DirectedGraph graph, LinkedList<Integer> order){
-        //implement DFS
+    private LinkedList<Integer> getFinishingOrder(Graph graph, LinkedList<Integer> order){
         Set<Integer> visited = new HashSet<>();
-        //preserving order
-        LinkedHashSet<Integer> finished = new LinkedHashSet<>();
-        //LinkedList<Integer> order = new LinkedList<>(graph.getVertices());
+        Set<Integer> finished = new LinkedHashSet<>();
 
         while (order.size() > 0){
             int v = order.removeLast();
@@ -66,32 +52,30 @@ public class SCC {
                 visit(graph, v, visited, finished);
             }
         }
-
         return new LinkedList<>(finished);
     }
 
-    private void visit(DirectedGraph graph, int v, Set<Integer> visited, LinkedHashSet<Integer> finished){
+    private void visit(Graph graph, int v, Set<Integer> visited, Set<Integer> finished){
         visited.add(v);
-        for (int n: graph.getEdges(v)){
-            if (!visited.contains(n)){
-                try{
-                    visit(graph, n, visited, finished);
-                }catch (Exception e){
-                    int t = 0;
-                }
-
+        graph.getEdges(v).forEach(e -> {
+            if (!visited.contains(e)){
+                visit(graph, e, visited, finished);
             }
-        }
+        });
         finished.add(v);
     }
 
-    private DirectedGraph invertGraph() {
-        DirectedGraph reverse = new DirectedGraph();
+    private Graph invertGraph(){
+        try{
+            Constructor<? extends Graph> constructor = graph.getClass().getConstructor();
+            Graph reverse = constructor.newInstance();
 
-        graph.getVertices().forEach(reverse::addVertex);
-        reverse.getVertices().forEach(v -> graph.getEdges(v).forEach(e -> reverse.addEdge(e, v)));
-        return reverse;
-
+            graph.getVertices().forEach(reverse::addVertex);
+            reverse.getVertices().forEach(v -> graph.getEdges(v).forEach(e -> reverse.addEdge(e, v)));
+            return reverse;
+        }catch (Exception e){
+            throw new RuntimeException("failed to invert graph");
+        }
     }
 
 
