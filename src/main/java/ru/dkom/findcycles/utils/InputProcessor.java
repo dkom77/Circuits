@@ -1,4 +1,6 @@
-package ru.dkom.findcycles;
+package ru.dkom.findcycles.utils;
+
+import ru.dkom.findcycles.data.Graph;
 
 import java.util.*;
 
@@ -13,6 +15,10 @@ public class InputProcessor {
 
     public Graph loadGraph(Graph graph){
         Scanner lineScanner = new Scanner("");
+
+        System.out.println("reading file");
+        int counter = 0;
+
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
             lineScanner = new Scanner(line);
@@ -33,13 +39,17 @@ public class InputProcessor {
                 graph.addVertex(depId);
                 graph.addEdge(mainId, depId);
             }
+            counter++;
         }
 
         lineScanner.close();
         scanner.close();
 
+        System.out.println("Graph loaded " + counter + " lines read. Graph vertices amount: " + graph.getVertices().size());
+
         return graph;
     }
+
 
     private Integer readInt(Scanner scanner){
         try {

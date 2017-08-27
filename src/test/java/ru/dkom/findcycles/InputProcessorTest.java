@@ -1,10 +1,11 @@
 package ru.dkom.findcycles;
 
 import org.junit.Test;
+import ru.dkom.findcycles.data.AdjListGraph;
+import ru.dkom.findcycles.data.Graph;
+import ru.dkom.findcycles.utils.InputProcessor;
 
 import java.io.*;
-import java.nio.CharBuffer;
-import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 import static org.junit.Assert.*;
@@ -14,7 +15,7 @@ public class InputProcessorTest {
     private Graph modelGraph;
 
     public InputProcessorTest(){
-        modelGraph = new DirectedGraph();
+        modelGraph = new AdjListGraph();
         initModelGraph();
     }
 
@@ -38,7 +39,7 @@ public class InputProcessorTest {
         Scanner scanner = new Scanner(sb.toString());
         InputProcessor processor = new InputProcessor(scanner);
 
-        DirectedGraph readGraph = (DirectedGraph) processor.loadGraph(new DirectedGraph());
+        AdjListGraph readGraph = (AdjListGraph) processor.loadGraph(new AdjListGraph());
 
         assertEquals(modelGraph, readGraph);
     }
@@ -47,23 +48,23 @@ public class InputProcessorTest {
     public void stringsContainingIllegalSymbolsShouldBeIgnored() throws Exception {
         StringBuilder sb = new StringBuilder();
 
-        sb.append(" ").append("\n");
-        sb.append("1.2 ").append("\n");
-        sb.append("-100 ").append("\n");
-        sb.append(" a").append("\n");
+        sb.append(" ").append("\n");            //empty string
+        sb.append("1.2 ").append("\n");         //not integer id
+        sb.append("-100 ").append("\n");        //negative id
+        sb.append(" a").append("\n");           //character id
         sb.append("18 a").append("\n");
         sb.append("-4 2").append("\n");
         sb.append("2 -4").append("\n");
-        sb.append("10 10 100").append("\n");
-        sb.append("3 3").append("\n");
+        sb.append("10 10 100").append("\n");    //too many ids
+        sb.append("3 3").append("\n");          //depends on self
 
         InputStream stream = new ByteArrayInputStream(sb.toString().getBytes());
         Scanner scanner = new Scanner(stream);
         InputProcessor processor = new InputProcessor(scanner);
 
-        DirectedGraph readGraph = (DirectedGraph) processor.loadGraph(new DirectedGraph());
+        AdjListGraph readGraph = (AdjListGraph) processor.loadGraph(new AdjListGraph());
 
-        assertEquals(new DirectedGraph(), readGraph);
+        assertEquals(new AdjListGraph(), readGraph);
     }
 
 

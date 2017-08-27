@@ -1,21 +1,18 @@
-package ru.dkom.findcycles;
+package ru.dkom.findcycles.data;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
-public class DirectedGraph implements Graph{
+public class AdjListGraph implements Graph{
 
     private Map<Integer, HashSet<Integer>> graph;
 
-    public DirectedGraph(){
+    public AdjListGraph(){
         graph = new HashMap<>();
     }
 
     public void addVertex(int id) {
         if (!graph.containsKey(id)){
-            graph.put(id, new HashSet<Integer>());
+            graph.put(id, new HashSet<>());
         }
     }
 
@@ -34,14 +31,14 @@ public class DirectedGraph implements Graph{
     }
 
     public HashSet<Integer> getEdges(int id) {
-        return (graph.get(id) == null) ? new HashSet<Integer>(): graph.get(id);
+        return (graph.get(id) == null) ? new HashSet<>(): graph.get(id);
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof DirectedGraph)) return false;
-        DirectedGraph other = (DirectedGraph) o;
+        if (!(o instanceof AdjListGraph)) return false;
+        AdjListGraph other = (AdjListGraph) o;
         return graph.equals(other.graph);
     }
 
