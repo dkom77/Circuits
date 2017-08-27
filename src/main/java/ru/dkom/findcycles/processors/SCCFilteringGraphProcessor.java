@@ -19,7 +19,7 @@ public class SCCFilteringGraphProcessor extends AbstractGraphProcessor {
     public SCCFilteringGraphProcessor findCycles() {
         if (graph == null) throw new IllegalStateException("Graph not defined");
         System.out.println("finding Scc: ");
-        List<Graph> components = getSCCs();
+        List<Graph> components = getSCCs(graph);
         System.out.println("" + components.size() + " found");
 
         for (Graph c : components) {
@@ -91,19 +91,6 @@ public class SCCFilteringGraphProcessor extends AbstractGraphProcessor {
         return path;
     }
 
-    private Graph invertGraph(Graph graph){
-        try{
-            Constructor<? extends Graph> constructor = graph.getClass().getConstructor();
-            Graph reverse = constructor.newInstance();
-
-            graph.getVertices().forEach(reverse::addVertex);
-            reverse.getVertices().forEach(v -> graph.getEdges(v).forEach(e -> reverse.addEdge(e, v)));
-            return reverse;
-        }catch (Exception e){
-            throw new RuntimeException("failed to invert graph");
-        }
-    }
-
     private List<List<Integer>> removeDuplicatedRoutes(List<List<Integer>> allPath){
         Set<List<Integer>> uniquePaths = new HashSet<>();
 
@@ -143,37 +130,51 @@ public class SCCFilteringGraphProcessor extends AbstractGraphProcessor {
         });
     }
 
-    public List<Graph> getSCCs() {
+    public List<Graph> getSCCs(Graph graph) {
         LinkedList<Integer> order = getFinishingOrder(graph, new LinkedList<>(graph.getVertices()));
-        Graph reverse = invertGraph();
+        Graph reverse = invertGraph(graph);
 
         List<Graph> stronglyConnectedComponents = new ArrayList<>();
         Set<Integer> visited = new HashSet<>();
         Set<Integer> finished = new LinkedHashSet<>();
 
+        List<Set<Integer>> sccs = new ArrayList<>();
+
         while(order.size() > 0) {
             int v = order.removeLast();
-            if (finished.contains(v)){
+            if (visited.contains(v)){
                 continue;
             }
+            visit(reverse, v, visited, finished);
 
-            LinkedHashSet<Integer> sccVertices = new LinkedHashSet<>();
-            visit(reverse, v, visited, sccVertices);
-
-            Graph scc = new AdjListGraph();
-            finished.addAll(sccVertices);
-            sccVertices.forEach(sccV -> {
-                graph.getEdges(sccV).forEach(sccE-> scc.addEdge(sccV, sccE));
-            });
-
-
-            stronglyConnectedComponents.add(scc);
-
+            sccs.add(new HashSet<>(finished));
+            finished = new LinkedHashSet<>();
         }
+
+        //restore links
+        for (Set<Integer> scc: sccs){
+            Graph component = getGraphInstance(graph);
+            for (Integer v: scc){
+                component.addVertex(v);
+                HashSet<Integer> edges = graph.getEdges(v);
+                for(Integer edge: edges){
+                    if (!scc.contains(edge)){
+                        continue;
+                    }
+                    component.addEdge(v, edge);
+                }
+            }
+            stronglyConnectedComponents.add(component);
+        }
+
+
         return stronglyConnectedComponents;
     }
 
     private LinkedList<Integer> getFinishingOrder(Graph graph, LinkedList<Integer> order){
+        Comparator<Integer> comparator = Integer::compareTo;
+        order.sort(comparator.reversed());
+
         Set<Integer> visited = new HashSet<>();
         Set<Integer> finished = new LinkedHashSet<>();
 
@@ -194,18 +195,5 @@ public class SCCFilteringGraphProcessor extends AbstractGraphProcessor {
             }
         });
         finished.add(v);
-    }
-
-    private Graph invertGraph(){
-        try{
-            Constructor<? extends Graph> constructor = graph.getClass().getConstructor();
-            Graph reverse = constructor.newInstance();
-
-            graph.getVertices().forEach(reverse::addVertex);
-            reverse.getVertices().forEach(v -> graph.getEdges(v).forEach(e -> reverse.addEdge(e, v)));
-            return reverse;
-        }catch (Exception e){
-            throw new RuntimeException("failed to invert graph");
-        }
     }
 }

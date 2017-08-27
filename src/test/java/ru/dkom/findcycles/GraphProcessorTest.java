@@ -6,6 +6,7 @@ import ru.dkom.findcycles.data.AdjListGraph;
 import ru.dkom.findcycles.data.Graph;
 import ru.dkom.findcycles.processors.AbstractGraphProcessor;
 import ru.dkom.findcycles.processors.BruteGraphProcessor;
+import ru.dkom.findcycles.processors.JohnsonAlgGraphProcessor;
 import ru.dkom.findcycles.processors.SCCFilteringGraphProcessor;
 
 import static org.junit.Assert.assertEquals;
@@ -18,8 +19,9 @@ public class GraphProcessorTest {
 
     @Before
     public void setUp(){
-        this.gp = new BruteGraphProcessor();
+        //this.gp = new BruteGraphProcessor();
         //this.gp = new SCCFilteringGraphProcessor();
+        this.gp = new JohnsonAlgGraphProcessor();
         this.modelGraph = new AdjListGraph();
     }
 
@@ -196,6 +198,37 @@ public class GraphProcessorTest {
         gp.setGraph(modelGraph);
 
         assertEquals("1 2 1\n1 3 4 2 1\n2 4 2", gp.findCycles().printCycles());
+    }
+
+    @Test
+    public void scc(){
+        modelGraph.addVertex(18);
+        modelGraph.addVertex(23);
+        modelGraph.addVertex(25);
+        modelGraph.addVertex(32);
+        modelGraph.addVertex(44);
+        modelGraph.addVertex(50);
+        modelGraph.addVertex(65);
+
+        modelGraph.addEdge(18, 23);
+        modelGraph.addEdge(18, 44);
+
+        modelGraph.addEdge(23, 18);
+        modelGraph.addEdge(23, 25);
+
+        modelGraph.addEdge(25, 23);
+        modelGraph.addEdge(25, 65);
+
+        modelGraph.addEdge(32, 44);
+        modelGraph.addEdge(32, 50);
+
+        modelGraph.addEdge(44, 50);
+
+        modelGraph.addEdge(65, 23);
+
+        gp.setGraph(modelGraph);
+
+        assertEquals("18 23 18\n23 25 23\n23 25 65 23", gp.findCycles().printCycles());
     }
 
     @Test

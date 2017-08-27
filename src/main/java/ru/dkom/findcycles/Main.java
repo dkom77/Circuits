@@ -4,6 +4,7 @@ import ru.dkom.findcycles.data.AdjListGraph;
 import ru.dkom.findcycles.data.Graph;
 import ru.dkom.findcycles.processors.AbstractGraphProcessor;
 import ru.dkom.findcycles.processors.BruteGraphProcessor;
+import ru.dkom.findcycles.processors.SCCFilteringGraphProcessor;
 import ru.dkom.findcycles.utils.InputProcessor;
 
 import java.io.File;
@@ -24,7 +25,8 @@ public class Main {
 
         InputProcessor loader = new InputProcessor(scanner);
         Graph graph = loader.loadGraph(new AdjListGraph());
-        AbstractGraphProcessor processor = new BruteGraphProcessor();
+        //AbstractGraphProcessor processor = new BruteGraphProcessor();
+        AbstractGraphProcessor processor = new SCCFilteringGraphProcessor();
 
         processor.setGraph(graph);
 

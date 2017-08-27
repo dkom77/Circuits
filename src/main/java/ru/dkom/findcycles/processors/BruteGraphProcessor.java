@@ -85,19 +85,6 @@ public class BruteGraphProcessor extends AbstractGraphProcessor {
         return path;
     }
 
-    private Graph invertGraph(Graph graph){
-        try{
-            Constructor<? extends Graph> constructor = graph.getClass().getConstructor();
-            Graph reverse = constructor.newInstance();
-
-            graph.getVertices().forEach(reverse::addVertex);
-            reverse.getVertices().forEach(v -> graph.getEdges(v).forEach(e -> reverse.addEdge(e, v)));
-            return reverse;
-        }catch (Exception e){
-            throw new RuntimeException("failed to invert graph");
-        }
-    }
-
     private List<List<Integer>> removeDuplicatedRoutes(List<List<Integer>> allPath){
         Set<List<Integer>> uniquePaths = new HashSet<>();
 
