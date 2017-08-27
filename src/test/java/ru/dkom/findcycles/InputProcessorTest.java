@@ -1,6 +1,9 @@
 package ru.dkom.findcycles;
 
 import org.junit.Test;
+import ru.dkom.findcycles.data.AdjListGraph;
+import ru.dkom.findcycles.data.Graph;
+import ru.dkom.findcycles.utils.InputProcessor;
 
 import java.io.*;
 import java.util.Scanner;

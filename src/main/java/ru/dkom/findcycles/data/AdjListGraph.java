@@ -1,4 +1,4 @@
-package ru.dkom.findcycles;
+package ru.dkom.findcycles.data;
 
 import java.util.*;
 
