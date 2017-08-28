@@ -2,24 +2,30 @@ package ru.dkom.findcycles.processors;
 
 import ru.dkom.findcycles.data.Graph;
 
-import java.lang.reflect.Constructor;
 import java.util.*;
 import java.util.stream.IntStream;
 
 import static java.util.Comparator.comparingInt;
 
-public class BruteGraphProcessor extends AbstractGraphProcessor {
+public class SimpleGP extends GraphProcessor {
 
-    public BruteGraphProcessor() {
+    public SimpleGP() {
         super();
     }
 
     @Override
-    public BruteGraphProcessor findCycles() {
+    public SimpleGP findCycles() {
         if (graph == null) throw new IllegalStateException("Graph not defined");
-        loops = new ArrayList<>();
-        List<List<Integer>> cycles = getCycles(graph);
-        loops.addAll(cycles);
+        System.out.println("finding Scc: ");
+        List<Graph> components = getSCCs(graph);
+        System.out.println("" + components.size() + " found");
+
+        for (Graph c : components) {
+            List<List<Integer>> cycles = getCycles(c);
+            loops.addAll(cycles);
+        }
+
+        sortPaths(loops);
         return this;
     }
 
@@ -41,7 +47,7 @@ public class BruteGraphProcessor extends AbstractGraphProcessor {
         }
 
         cycles = removeDuplicatedRoutes(allPath);
-        sortPaths(cycles);
+
 
         return cycles;
     }
@@ -72,17 +78,6 @@ public class BruteGraphProcessor extends AbstractGraphProcessor {
             }
         }
         throw new Exception("not a cycle");
-    }
-
-    private List<Integer> reconstructPath(Integer start, Integer finish, HashMap<Integer, Integer> map) {
-        LinkedList<Integer> path = new LinkedList<>();
-        Integer curr = finish;
-        while (!curr.equals(start)) {
-            path.addFirst(curr);
-            curr = map.get(curr);
-        }
-        path.addFirst(start);
-        return path;
     }
 
     private List<List<Integer>> removeDuplicatedRoutes(List<List<Integer>> allPath){

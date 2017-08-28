@@ -4,12 +4,12 @@ import ru.dkom.findcycles.data.Graph;
 
 import java.util.*;
 
-public class InputProcessor {
+public class GraphLoader {
 
     private Scanner scanner;
 
 
-    public InputProcessor(Scanner scanner){
+    public GraphLoader(Scanner scanner){
         this.scanner = scanner;
     }
 

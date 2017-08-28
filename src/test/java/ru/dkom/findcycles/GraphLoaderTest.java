@@ -3,7 +3,7 @@ package ru.dkom.findcycles;
 import org.junit.Test;
 import ru.dkom.findcycles.data.AdjListGraph;
 import ru.dkom.findcycles.data.Graph;
-import ru.dkom.findcycles.utils.InputProcessor;
+import ru.dkom.findcycles.utils.GraphLoader;
 
 import java.io.*;
 import java.util.Scanner;
@@ -11,10 +11,10 @@ import java.util.Scanner;
 import static org.junit.Assert.*;
 
 
-public class InputProcessorTest {
+public class GraphLoaderTest {
     private Graph modelGraph;
 
-    public InputProcessorTest(){
+    public GraphLoaderTest(){
         modelGraph = new AdjListGraph();
         initModelGraph();
     }
@@ -37,7 +37,7 @@ public class InputProcessorTest {
         sb.append(" 6").append("\n");
 
         Scanner scanner = new Scanner(sb.toString());
-        InputProcessor processor = new InputProcessor(scanner);
+        GraphLoader processor = new GraphLoader(scanner);
 
         AdjListGraph readGraph = (AdjListGraph) processor.loadGraph(new AdjListGraph());
 
@@ -60,7 +60,7 @@ public class InputProcessorTest {
 
         InputStream stream = new ByteArrayInputStream(sb.toString().getBytes());
         Scanner scanner = new Scanner(stream);
-        InputProcessor processor = new InputProcessor(scanner);
+        GraphLoader processor = new GraphLoader(scanner);
 
         AdjListGraph readGraph = (AdjListGraph) processor.loadGraph(new AdjListGraph());
 

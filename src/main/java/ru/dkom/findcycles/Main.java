@@ -2,10 +2,9 @@ package ru.dkom.findcycles;
 
 import ru.dkom.findcycles.data.AdjListGraph;
 import ru.dkom.findcycles.data.Graph;
-import ru.dkom.findcycles.processors.AbstractGraphProcessor;
-import ru.dkom.findcycles.processors.BruteGraphProcessor;
-import ru.dkom.findcycles.processors.SCCFilteringGraphProcessor;
-import ru.dkom.findcycles.utils.InputProcessor;
+import ru.dkom.findcycles.processors.GraphProcessor;
+import ru.dkom.findcycles.processors.SimpleGP;
+import ru.dkom.findcycles.utils.GraphLoader;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -23,10 +22,10 @@ public class Main {
             return;
         }
 
-        InputProcessor loader = new InputProcessor(scanner);
+        GraphLoader loader = new GraphLoader(scanner);
         Graph graph = loader.loadGraph(new AdjListGraph());
-        //AbstractGraphProcessor processor = new BruteGraphProcessor();
-        AbstractGraphProcessor processor = new SCCFilteringGraphProcessor();
+        GraphProcessor processor = new SimpleGP();
+        //GraphProcessor processor = new SCCFilteringGraphProcessor();
 
         processor.setGraph(graph);
 

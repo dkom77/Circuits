@@ -4,24 +4,22 @@ import org.junit.Before;
 import org.junit.Test;
 import ru.dkom.findcycles.data.AdjListGraph;
 import ru.dkom.findcycles.data.Graph;
-import ru.dkom.findcycles.processors.AbstractGraphProcessor;
-import ru.dkom.findcycles.processors.BruteGraphProcessor;
-import ru.dkom.findcycles.processors.JohnsonAlgGraphProcessor;
-import ru.dkom.findcycles.processors.SCCFilteringGraphProcessor;
+import ru.dkom.findcycles.processors.GraphProcessor;
+import ru.dkom.findcycles.processors.AdvancedGP;
+import ru.dkom.findcycles.processors.SimpleGP;
 
 import static org.junit.Assert.assertEquals;
 
 
 public class GraphProcessorTest {
 
-    private AbstractGraphProcessor gp;
+    private GraphProcessor gp;
     private Graph modelGraph;
 
     @Before
     public void setUp(){
-        //this.gp = new BruteGraphProcessor();
-        //this.gp = new SCCFilteringGraphProcessor();
-        this.gp = new JohnsonAlgGraphProcessor();
+        this.gp = new SimpleGP();
+        //this.gp = new AdvancedGP();
         this.modelGraph = new AdjListGraph();
     }
 
