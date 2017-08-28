@@ -18,8 +18,8 @@ public class GraphProcessorTest {
 
     @Before
     public void setUp(){
-        this.gp = new SimpleGP();
-        //this.gp = new AdvancedGP();
+        //this.gp = new SimpleGP();
+        this.gp = new AdvancedGP();
         this.modelGraph = new AdjListGraph();
     }
 

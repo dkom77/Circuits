@@ -47,12 +47,6 @@ public abstract class GraphProcessor {
         }
     }
 
-    private String unwindCycle(List<Integer> path) {
-        StringBuilder sb = new StringBuilder();
-        path.forEach(v -> sb.append(v).append(" "));
-        return sb.toString().trim();
-    }
-
     protected List<Graph> getSCCs(Graph graph) {
         LinkedList<Integer> order = getFinishingOrder(graph, new LinkedList<>(graph.getVertices()));
         Graph reverse = invertGraph(graph);
@@ -89,7 +83,6 @@ public abstract class GraphProcessor {
             }
             stronglyConnectedComponents.add(component);
         }
-
 
         return stronglyConnectedComponents;
     }
@@ -129,5 +122,31 @@ public abstract class GraphProcessor {
         }
         path.addFirst(start);
         return path;
+    }
+
+    protected void sortPaths (List<List<Integer>> cycles) {
+        cycles.sort((List<Integer> c1, List<Integer> c2) -> {
+            for (int i = 0; i < Math.min(c1.size(), c2.size()); i++) {
+                if (!c1.get(i).equals(c2.get(i))) {
+                    return (c1.get(i) < c2.get(i)) ? -1 : 1;
+                }
+            }
+
+            if (c1.size() < c2.size()) {
+                return -1;
+            }
+
+            if (c1.size() < c2.size()) {
+                return 1;
+            }
+
+            return 0;
+        });
+    }
+
+    private String unwindCycle(List<Integer> path) {
+        StringBuilder sb = new StringBuilder();
+        path.forEach(v -> sb.append(v).append(" "));
+        return sb.toString().trim();
     }
 }

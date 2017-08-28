@@ -25,7 +25,7 @@ public class Main {
         GraphLoader loader = new GraphLoader(scanner);
         Graph graph = loader.loadGraph(new AdjListGraph());
         GraphProcessor processor = new SimpleGP();
-        //GraphProcessor processor = new SCCFilteringGraphProcessor();
+        //GraphProcessor processor = new AdvancedGP();
 
         processor.setGraph(graph);
 

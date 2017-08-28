@@ -99,23 +99,5 @@ public class SimpleGP extends GraphProcessor {
         return new ArrayList<>(uniquePaths);
     }
 
-    private void sortPaths (List<List<Integer>> cycles){
-        cycles.sort((List<Integer> c1, List<Integer> c2) -> {
-            for (int i = 0; i < Math.min(c1.size(), c2.size()); i++) {
-                if (!c1.get(i).equals(c2.get(i))) {
-                    return (c1.get(i) < c2.get(i)) ? -1 : 1;
-                }
-            }
 
-            if (c1.size() < c2.size()) {
-                return -1;
-            }
-
-            if (c1.size() < c2.size()) {
-                return 1;
-            }
-
-            return 0;
-        });
-    }
 }
