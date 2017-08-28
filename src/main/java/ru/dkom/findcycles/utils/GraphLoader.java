@@ -21,6 +21,10 @@ public class GraphLoader {
 
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
+            if (line.equals("")){
+                break;
+            }
+
             lineScanner = new Scanner(line);
 
             Integer mainId = readInt(lineScanner);

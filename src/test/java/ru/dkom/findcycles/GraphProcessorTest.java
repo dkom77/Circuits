@@ -5,7 +5,7 @@ import org.junit.Test;
 import ru.dkom.findcycles.data.AdjListGraph;
 import ru.dkom.findcycles.data.Graph;
 import ru.dkom.findcycles.processors.GraphProcessor;
-import ru.dkom.findcycles.processors.AdvancedGP;
+import ru.dkom.findcycles.processors.JohnsonGP;
 import ru.dkom.findcycles.processors.SimpleGP;
 
 import static org.junit.Assert.assertEquals;
@@ -19,7 +19,7 @@ public class GraphProcessorTest {
     @Before
     public void setUp(){
         //this.gp = new SimpleGP();
-        this.gp = new AdvancedGP();
+        this.gp = new JohnsonGP();
         this.modelGraph = new AdjListGraph();
     }
 
@@ -45,7 +45,7 @@ public class GraphProcessorTest {
 
         gp.setGraph(modelGraph);
 
-        assertEquals("1 2 1\n5 6 5", gp.findCycles().printCycles());
+        assertEquals("1 2 1\n5 6 5", gp.findCircuits().printCycles());
     }
 
     @Test
@@ -64,7 +64,7 @@ public class GraphProcessorTest {
         modelGraph.addEdge(4,1);
 
         gp.setGraph(modelGraph);
-        assertEquals("1 2 3 4 1", gp.findCycles().printCycles());
+        assertEquals("1 2 3 4 1", gp.findCircuits().printCycles());
     }
 
     @Test
@@ -84,7 +84,7 @@ public class GraphProcessorTest {
         modelGraph.addEdge(3, 0);
 
         gp.setGraph(modelGraph);
-        assertEquals("0 1 3 0\n0 2 0", gp.findCycles().printCycles());
+        assertEquals("0 1 3 0\n0 2 0", gp.findCircuits().printCycles());
     }
 
     @Test
@@ -108,7 +108,7 @@ public class GraphProcessorTest {
         modelGraph.addEdge(4, 3);
 
         gp.setGraph(modelGraph);
-        assertEquals("0 1 3 0\n0 2 0\n3 4 3", gp.findCycles().printCycles());
+        assertEquals("0 1 3 0\n0 2 0\n3 4 3", gp.findCircuits().printCycles());
     }
 
     @Test
@@ -129,7 +129,7 @@ public class GraphProcessorTest {
         modelGraph.addEdge(3, 2);
 
         gp.setGraph(modelGraph);
-        assertEquals("2 3 2", gp.findCycles().printCycles());
+        assertEquals("2 3 2", gp.findCircuits().printCycles());
     }
 
     @Test
@@ -150,7 +150,7 @@ public class GraphProcessorTest {
         modelGraph.addEdge(3, 1);
 
         gp.setGraph(modelGraph);
-        assertEquals("0 1 2 0\n0 1 2 3 0\n1 2 3 1", gp.findCycles().printCycles());
+        assertEquals("0 1 2 0\n0 1 2 3 0\n1 2 3 1", gp.findCircuits().printCycles());
     }
 
     @Test
@@ -173,7 +173,7 @@ public class GraphProcessorTest {
         modelGraph.addEdge(4, 0);
 
         gp.setGraph(modelGraph);
-        assertEquals("0 1 2 4 0\n0 1 3 4 0", gp.findCycles().printCycles());
+        assertEquals("0 1 2 4 0\n0 1 3 4 0", gp.findCircuits().printCycles());
     }
 
     @Test
@@ -195,7 +195,7 @@ public class GraphProcessorTest {
 
         gp.setGraph(modelGraph);
 
-        assertEquals("1 2 1\n1 3 4 2 1\n2 4 2", gp.findCycles().printCycles());
+        assertEquals("1 2 1\n1 3 4 2 1\n2 4 2", gp.findCircuits().printCycles());
     }
 
     @Test
@@ -226,7 +226,7 @@ public class GraphProcessorTest {
 
         gp.setGraph(modelGraph);
 
-        assertEquals("18 23 18\n23 25 23\n23 25 65 23", gp.findCycles().printCycles());
+        assertEquals("18 23 18\n23 25 23\n23 25 65 23", gp.findCircuits().printCycles());
     }
 
     @Test
@@ -236,6 +236,7 @@ public class GraphProcessorTest {
         modelGraph.addVertex(2);
         modelGraph.addVertex(3);
         modelGraph.addVertex(4);
+        modelGraph.addVertex(5);
 
         modelGraph.addEdge(0, 1);
 
@@ -246,7 +247,7 @@ public class GraphProcessorTest {
         modelGraph.addEdge(3, 4);
 
         gp.setGraph(modelGraph);
-        assertEquals("", gp.findCycles().printCycles());
+        assertEquals("", gp.findCircuits().printCycles());
     }
 
 

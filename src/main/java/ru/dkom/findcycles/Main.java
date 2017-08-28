@@ -2,8 +2,8 @@ package ru.dkom.findcycles;
 
 import ru.dkom.findcycles.data.AdjListGraph;
 import ru.dkom.findcycles.data.Graph;
+import ru.dkom.findcycles.processors.JohnsonGP;
 import ru.dkom.findcycles.processors.GraphProcessor;
-import ru.dkom.findcycles.processors.SimpleGP;
 import ru.dkom.findcycles.utils.GraphLoader;
 
 import java.io.File;
@@ -24,11 +24,11 @@ public class Main {
 
         GraphLoader loader = new GraphLoader(scanner);
         Graph graph = loader.loadGraph(new AdjListGraph());
-        GraphProcessor processor = new SimpleGP();
-        //GraphProcessor processor = new AdvancedGP();
+        //GraphProcessor processor = new SimpleGP();
+        GraphProcessor processor = new JohnsonGP();
 
         processor.setGraph(graph);
 
-        System.out.println(processor.findCycles().printCycles());
+        System.out.println(processor.findCircuits().printCycles());
     }
 }

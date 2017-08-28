@@ -14,7 +14,7 @@ public class SimpleGP extends GraphProcessor {
     }
 
     @Override
-    public SimpleGP findCycles() {
+    public SimpleGP findCircuits() {
         if (graph == null) throw new IllegalStateException("Graph not defined");
         System.out.println("finding Scc: ");
         List<Graph> components = getSCCs(graph);
@@ -30,7 +30,7 @@ public class SimpleGP extends GraphProcessor {
     }
 
     private List<List<Integer>> getCycles(Graph graph) {
-        List<List<Integer>> cycles = new ArrayList<>();
+        List<List<Integer>> cycles;
         List<List<Integer>> allPath = new ArrayList<>();
 
         Graph reverse = invertGraph(graph);
@@ -47,8 +47,6 @@ public class SimpleGP extends GraphProcessor {
         }
 
         cycles = removeDuplicatedRoutes(allPath);
-
-
         return cycles;
     }
 
@@ -67,15 +65,13 @@ public class SimpleGP extends GraphProcessor {
                 return reconstructPath(start, dest, map);
             }
 
-            HashSet<Integer> edges = graph.getEdges(curr);
-
-            for (Integer n : edges) {
-                if (!visited.contains(n)) {
-                    visited.add(n);
-                    stack.add(n);
-                    map.put(n, curr);
+            graph.getEdges(curr).forEach(e -> {
+                if (!visited.contains(e)) {
+                    visited.add(e);
+                    stack.add(e);
+                    map.put(e, curr);
                 }
-            }
+            });
         }
         throw new Exception("not a cycle");
     }
@@ -98,6 +94,4 @@ public class SimpleGP extends GraphProcessor {
 
         return new ArrayList<>(uniquePaths);
     }
-
-
 }

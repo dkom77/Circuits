@@ -23,19 +23,12 @@ public abstract class GraphProcessor {
         this.graph = graph;
     }
 
-    public abstract GraphProcessor findCycles() throws IllegalStateException;
+    public abstract GraphProcessor findCircuits() throws IllegalStateException;
 
     public String printCycles(){
         StringBuilder sb = new StringBuilder();
         loops.forEach(cs -> sb.append(unwindCycle(cs)).append("\n"));
         return sb.toString().trim();
-    }
-
-    protected Graph invertGraph(Graph graph) {
-        Graph reverse = getGraphInstance(graph);
-        graph.getVertices().forEach(reverse::addVertex);
-        reverse.getVertices().forEach(v -> graph.getEdges(v).forEach(e -> reverse.addEdge(e, v)));
-        return reverse;
     }
 
     protected Graph getGraphInstance(Graph graph){
@@ -85,6 +78,13 @@ public abstract class GraphProcessor {
         }
 
         return stronglyConnectedComponents;
+    }
+
+    protected Graph invertGraph(Graph graph) {
+        Graph reverse = getGraphInstance(graph);
+        graph.getVertices().forEach(reverse::addVertex);
+        reverse.getVertices().forEach(v -> graph.getEdges(v).forEach(e -> reverse.addEdge(e, v)));
+        return reverse;
     }
 
     protected LinkedList<Integer> getFinishingOrder(Graph graph, LinkedList<Integer> order){
