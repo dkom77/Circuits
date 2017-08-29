@@ -14,7 +14,7 @@ public class SimpleGP extends GraphProcessor {
     }
 
     @Override
-    public SimpleGP findCircuits() {
+    public SimpleGP findCircuits()  throws IllegalStateException {
         if (graph == null) throw new IllegalStateException("Graph not defined");
         System.out.println("finding Scc: ");
         List<Graph> components = getSCCs(graph);
