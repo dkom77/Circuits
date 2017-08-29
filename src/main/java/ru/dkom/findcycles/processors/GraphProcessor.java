@@ -76,7 +76,6 @@ public abstract class GraphProcessor {
             }
             stronglyConnectedComponents.add(component);
         }
-
         return stronglyConnectedComponents;
     }
 
@@ -85,32 +84,6 @@ public abstract class GraphProcessor {
         graph.getVertices().forEach(reverse::addVertex);
         reverse.getVertices().forEach(v -> graph.getEdges(v).forEach(e -> reverse.addEdge(e, v)));
         return reverse;
-    }
-
-    protected LinkedList<Integer> getFinishingOrder(Graph graph, LinkedList<Integer> order){
-        Comparator<Integer> comparator = Integer::compareTo;
-        order.sort(comparator.reversed());
-
-        Set<Integer> visited = new HashSet<>();
-        Set<Integer> finished = new LinkedHashSet<>();
-
-        while (order.size() > 0){
-            int v = order.removeLast();
-            if (!visited.contains(v)){
-                visit(graph, v, visited, finished);
-            }
-        }
-        return new LinkedList<>(finished);
-    }
-
-    protected void visit(Graph graph, int v, Set<Integer> visited, Set<Integer> finished){
-        visited.add(v);
-        graph.getEdges(v).forEach(e -> {
-            if (!visited.contains(e)){
-                visit(graph, e, visited, finished);
-            }
-        });
-        finished.add(v);
     }
 
     protected List<Integer> reconstructPath(Integer start, Integer finish, HashMap<Integer, Integer> map) {
@@ -142,6 +115,32 @@ public abstract class GraphProcessor {
 
             return 0;
         });
+    }
+
+    private LinkedList<Integer> getFinishingOrder(Graph graph, LinkedList<Integer> order){
+        Comparator<Integer> comparator = Integer::compareTo;
+        order.sort(comparator.reversed());
+
+        Set<Integer> visited = new HashSet<>();
+        Set<Integer> finished = new LinkedHashSet<>();
+
+        while (order.size() > 0){
+            int v = order.removeLast();
+            if (!visited.contains(v)){
+                visit(graph, v, visited, finished);
+            }
+        }
+        return new LinkedList<>(finished);
+    }
+
+    private void visit(Graph graph, int v, Set<Integer> visited, Set<Integer> finished){
+        visited.add(v);
+        graph.getEdges(v).forEach(e -> {
+            if (!visited.contains(e)){
+                visit(graph, e, visited, finished);
+            }
+        });
+        finished.add(v);
     }
 
     private String unwindCycle(List<Integer> path) {
