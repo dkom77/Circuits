@@ -136,7 +136,7 @@ public abstract class GraphProcessor {
                 return -1;
             }
 
-            if (c1.size() < c2.size()) {
+            if (c1.size() > c2.size()) {
                 return 1;
             }
 
