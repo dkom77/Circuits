@@ -36,7 +36,7 @@ public abstract class GraphProcessor {
             Constructor<? extends Graph> constructor = graph.getClass().getConstructor();
             return constructor.newInstance();
         }catch (Exception e){
-            throw new RuntimeException("failed to invert graph");
+            throw new RuntimeException("failed to create graph instance");
         }
     }
 
