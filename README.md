@@ -1,5 +1,5 @@
 # Circuits
-Search for circular dependencies in a directed graph
+Search directed graph for circular dependencies.
 
 <h2>build</h2>
 mvn package
